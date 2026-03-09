@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InMemoryLaunchRepository.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">application</a> &gt; <a href="index.source.html" class="el_package">com.cosmochain.support</a> &gt; <span class="el_source">InMemoryLaunchRepository.java</span></div><h1>InMemoryLaunchRepository.java</h1><pre class="source lang-java linenums">package com.cosmochain.support;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * In-memory implementation of launch state storage keyed by provider name.
+ */
+<span class="nc" id="L9">public class InMemoryLaunchRepository implements LaunchRepository {</span>
+<span class="nc" id="L10">    private final Map&lt;String, Launch&gt; lastSeen = new HashMap&lt;&gt;();</span>
+
+    /**
+     * Returns the last-seen launch for a provider.
+     *
+     * @param provider provider key.
+     * @return last-seen launch or null when not found.
+     */
+    @Override
+    public Launch getLastSeen(String provider) {
+<span class="nc" id="L20">        return lastSeen.get(provider);</span>
+    }
+
+    /**
+     * Stores the last-seen launch for a provider.
+     *
+     * @param provider provider key.
+     * @param launch launch value to store.
+     */
+    @Override
+    public void setLastSeen(String provider, Launch launch) {
+<span class="nc" id="L31">        lastSeen.put(provider, launch);</span>
+<span class="nc" id="L32">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
