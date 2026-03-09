@@ -1,3 +1,31 @@
-# Purpose of this Folder
+# CosmoChain Starter Project
 
-This folder should contain the scaffolded project files to get a student started on their project. This repo will be added to the Classroom for students to use, so please do not have any solutions in this folder.
+This project is intentionally incomplete.
+
+You are expected to:
+- inspect the code and identify suspicious behavior
+- repair the Maven test/build setup
+- write tests before changing logic
+- complete unit, mocking, integration, and coverage work
+
+Project location:
+- `application/` contains the Java project you will work in
+
+Expected tools and topics:
+- JUnit 6
+- Mockito
+- Maven test and integration lifecycle
+- JaCoCo coverage checks
+
+From this folder, move into the app before running Maven:
+
+```bash
+cd application
+```
+
+Once the project setup is repaired, the standard commands should be:
+
+```bash
+mvn test -DskipITs=true
+mvn verify
+```
