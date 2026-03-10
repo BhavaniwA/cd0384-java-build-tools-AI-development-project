@@ -37,6 +37,24 @@ Verify installations using:
 
 ---
 
+## Project Dependency Versions
+
+This project uses specific dependency versions defined in the Maven `pom.xml`.  
+Students should **not modify these versions**, as the testing and build configuration depends on them.
+
+| Dependency | Version |
+|-------------|--------|
+| Java | 17 |
+| JUnit Jupiter | 6.0.3 |
+| Mockito | 5.22.0 |
+| JaCoCo | 0.8.14 |
+| JSON Library | 20251224 |
+| Maven Compiler Plugin | 3.15.0 |
+| Maven Surefire Plugin | 3.5.5 |
+| Maven Failsafe Plugin | 3.5.5 |
+
+These versions are configured in the `pom.xml` file under the `<properties>` section.
+
 ## Installation
 
 Clone the repository:
