@@ -162,7 +162,7 @@ Verify the build using:
 
 ---
 
-## Phase 2: Implement Unit Tests with JUnit 5
+## Phase 2: Implement Unit Tests with JUnit 6
 
 Complete the unit tests using **Test-Driven Development (TDD)**.
 
