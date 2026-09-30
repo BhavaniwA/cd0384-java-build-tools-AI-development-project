@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
@@ -94,7 +95,12 @@ class ApplicationIntegrationIT {
         ProviderLaunchApiClient client = new ProviderLaunchApiClient("SpaceX", new RealHttpGateway(), baseUrl + "/spacex");
         List<Launch> launches = client.fetchUpcomingLaunches(1);
         Launch launch = launches.isEmpty() ? null : launches.get(0);
-        // TODO assert the parsed SpaceX launch fields
+        assertNotNull(launch);
+        assertEquals("spx-1", launch.id);
+        assertEquals("Falcon Integration", launch.name);
+        assertEquals("2026-03-15T12:00:00Z", launch.dateUtc);
+        assertEquals("99", launch.flightNumber);
+        assertEquals("SpaceX detail", launch.details);
     }
 
     /**
@@ -107,7 +113,12 @@ class ApplicationIntegrationIT {
         ProviderLaunchApiClient client = new ProviderLaunchApiClient("NASA", new RealHttpGateway(), baseUrl + "/nasa-array");
         List<Launch> launches = client.fetchUpcomingLaunches(1);
         Launch launch = launches.isEmpty() ? null : launches.get(0);
-        // TODO assert the parsed NASA launch fields
+        assertNotNull(launch);
+        assertEquals("nasa-1", launch.id);
+        assertEquals("Artemis Integration", launch.name);
+        assertEquals("2026-06-01T11:00:00+01:00", launch.dateUtc);
+        assertNull(launch.flightNumber);
+        assertEquals("Line 1\nLine 2 detail", launch.details);
     }
 
     /**
@@ -116,7 +127,8 @@ class ApplicationIntegrationIT {
     @Test
     void propagatesRateLimitFrom429Response() {
         ProviderLaunchApiClient client = new ProviderLaunchApiClient("SpaceX", new RealHttpGateway(), baseUrl + "/throttled");
-        // TODO assert the throttled response behavior
+        RateLimitException exception = assertThrows(RateLimitException.class, () -> client.fetchUpcomingLaunches(1));
+        assertTrue(exception.getMessage().contains("8"));
     }
 
     /**
@@ -128,7 +140,7 @@ class ApplicationIntegrationIT {
     void ignoresObjectsMissingRequiredLaunchFields() throws Exception {
         ProviderLaunchApiClient client = new ProviderLaunchApiClient("NASA", new RealHttpGateway(), baseUrl + "/invalid");
         List<Launch> launches = client.fetchUpcomingLaunches(3);
-        // TODO assert invalid launch objects are ignored
+        assertTrue(launches.isEmpty());
     }
 
     /**
@@ -138,7 +150,7 @@ class ApplicationIntegrationIT {
     void handlesHttpErrorResponseWithoutBody() {
         ProviderLaunchApiClient client =
             new ProviderLaunchApiClient("NASA", new RealHttpGateway(), baseUrl + "/server-error-empty");
-        // TODO assert the empty-body HTTP error behavior
+        assertThrows(IOException.class, () -> client.fetchUpcomingLaunches(1));
     }
 
     /**
@@ -197,7 +209,12 @@ class ApplicationIntegrationIT {
 
         LaunchUpdateService service = new LaunchUpdateService(List.of(brokenProvider, healthyProvider), repo, notifier);
         service.checkForUpdatesAcrossProviders();
-        // TODO assert the workflow stores the launch and records one notification
+        Launch stored = repo.getLastSeen("IntegrationProvider");
+        assertNotNull(stored);
+        assertEquals("mission-1", stored.id);
+        assertEquals("Mission", stored.name);
+        assertEquals(1, notifier.messages.size());
+        assertEquals("IntegrationProvider|NEW|mission-1", notifier.messages.get(0));
     }
 
     /**
