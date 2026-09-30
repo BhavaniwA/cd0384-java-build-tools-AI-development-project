@@ -195,7 +195,17 @@ class CoreLogicAndWorkflowTest {
                 .notify("HealthyProvider", "NEW", next);
     }
 
+    @Test
+    @DisplayName("RateLimitException stores retry delay")
+    void rateLimitExceptionStoresRetryDelay() {
+        RateLimitException exception =
+                new RateLimitException("Too many requests", 30);
+
+        assertTrue(exception.getMessage().contains("Too many requests"));
+        assertTrue(exception.getRetryAfterSeconds() == 30);
+    }
+
     private static Launch launch(String id, String dateUtc) {
         return new Launch(id, "Mission", dateUtc, "7", "details");
-    }
+}
 }
